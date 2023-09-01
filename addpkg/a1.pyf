@@ -1,7 +1,7 @@
 !    -*- f90 -*-
 ! Note: the context of this file is case sensitive.
 
-python module add ! in 
+python module a1 ! in 
     interface  ! in :add
         subroutine add(a,b,c) ! in :add:add.f90
             real intent(in) :: a
@@ -9,7 +9,7 @@ python module add ! in
             real intent(out) :: c
         end subroutine add
     end interface 
-end python module add
+end python module a1
 
 ! This file was auto-generated with f2py (version:1.24.4).
 ! See:

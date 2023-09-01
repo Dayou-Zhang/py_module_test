@@ -22,31 +22,20 @@ file(GLOB_RECURSE sources "*.f" "*.f90")
 foreach(fortran_src_file ${sources})
     get_filename_component(f2py_module_name ${fortran_src_file} NAME_WE)
     string(REGEX REPLACE "[.]f(90)?$" ".pyf" f2py_signature_file ${fortran_src_file})
-    set(f2py_module_c "${f2py_module_name}module.c")
+    set(f2py_module_so "${CMAKE_CURRENT_BINARY_DIR}/${f2py_module_name}.${Python_SOABI}.so")
 
     add_custom_command(
-      OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${f2py_module_c}"
+      OUTPUT "${f2py_module_so}"
       COMMAND ${PYTHON_EXECUTABLE}  -m "numpy.f2py"
                        "${fortran_src_file}"
-                       "${f2py_signature_file}"
-                       -m "${f2py_module_name}"
+                       -c "${f2py_signature_file}"
                        --lower
       DEPENDS "${fortran_src_file}"
     )
 
-    python_add_library(${f2py_module_name} MODULE
-                "${f2py_module_c}"
-                "${F2PY_INCLUDE_DIR}/fortranobject.c"
-                "${fortran_src_file}" WITH_SOABI)
+    add_custom_target(${f2py_module_name} ALL DEPENDS ${f2py_module_so})
 
-    target_include_directories(${f2py_module_name} PUBLIC
-                               ${F2PY_INCLUDE_DIR}
-                              )
-
-    target_link_libraries(${f2py_module_name} PUBLIC Python::NumPy)
-
-
-    install(TARGETS ${f2py_module_name} DESTINATION ${CMAKE_PROJECT_NAME})
+    install(PROGRAMS ${f2py_module_so} DESTINATION ${CMAKE_PROJECT_NAME})
 
 endforeach()
 
