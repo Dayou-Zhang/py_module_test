@@ -35,7 +35,7 @@ foreach(fortran_src_file ${sources})
 
     add_custom_target(${f2py_module_name} ALL DEPENDS ${f2py_module_so})
 
-    install(PROGRAMS ${f2py_module_so} DESTINATION ${CMAKE_PROJECT_NAME})
+    install(PROGRAMS ${f2py_module_so} DESTINATION ${CMAKE_PROJECT_NAME}/${f2py_module_name})
 
 endforeach()
 

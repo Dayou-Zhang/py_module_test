@@ -1,9 +1,9 @@
-import addpkg.a1
-import addpkg.a2
+import addpkg.a1.a1 as a1
+import addpkg.a2.a2 as a2
 
 def test():
-    print(addpkg.a1.add(1, 2))
-    print(addpkg.a2.add(1, 2))
+    print(a1.add(1, 2))
+    print(a2.add(1, 2))
 
 if __name__ == '__main__':
     test()
