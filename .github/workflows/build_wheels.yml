@@ -16,38 +16,48 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      # - name: Install OpenBLAS
+        # run: sudo apt-get install -y libopenblas-dev
+
       - name: Install OpenBLAS
-        run: sudo apt-get install -y libopenblas-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gfortran gcc
+          git clone https://github.com/xianyi/OpenBLAS.git
+          cd OpenBLAS
+          make -j DYNAMIC_ARCH=0 CC=gcc FC=gfortran HOSTCC=gcc BINARY=64 \
+              NO_AFFINITY=1 NO_WARMUP=1 USE_OPENMP=0 USE_THREAD=0 USE_LOCKING=1
+          make PREFIX=../OpenBLAS_build install
 
       - name: Build wheel for CPython 3.7
         uses: pypa/cibuildwheel@v2.15.0
         env:
           CIBW_BUILD: cp37-manylinux_x86_64
-          CIBW_ENVIRONMENT: CMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu
+          CIBW_ENVIRONMENT: BLA_VENDOR=OpenBLAS CMAKE_PREFIX_PATH=./OpenBLAS_build
 
       - name: Build wheel for CPython 3.8
         uses: pypa/cibuildwheel@v2.15.0
         env:
           CIBW_BUILD: cp38-manylinux_x86_64
-          CIBW_ENVIRONMENT: CMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu
+          CIBW_ENVIRONMENT: BLA_VENDOR=OpenBLAS CMAKE_PREFIX_PATH=./OpenBLAS_build
 
       - name: Build wheel for CPython 3.9
         uses: pypa/cibuildwheel@v2.15.0
         env:
           CIBW_BUILD: cp39-manylinux_x86_64
-          CIBW_ENVIRONMENT: CMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu
+          CIBW_ENVIRONMENT: BLA_VENDOR=OpenBLAS CMAKE_PREFIX_PATH=./OpenBLAS_build
 
       - name: Build wheel for CPython 3.10
         uses: pypa/cibuildwheel@v2.15.0
         env:
           CIBW_BUILD: cp310-manylinux_x86_64
-          CIBW_ENVIRONMENT: CMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu
+          CIBW_ENVIRONMENT: BLA_VENDOR=OpenBLAS CMAKE_PREFIX_PATH=./OpenBLAS_build
 
       - name: Build wheel for CPython 3.11
         uses: pypa/cibuildwheel@v2.15.0
         env:
           CIBW_BUILD: cp311-manylinux_x86_64
-          CIBW_ENVIRONMENT: CMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu
+          CIBW_ENVIRONMENT: BLA_VENDOR=OpenBLAS CMAKE_PREFIX_PATH=./OpenBLAS_build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
