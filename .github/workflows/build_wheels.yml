@@ -16,6 +16,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Install OpenBLAS
+        run: sudo apt-get install -y libopenblas-dev
+
       - name: Build wheel for CPython 3.7
         uses: pypa/cibuildwheel@v2.15.0
         env:
