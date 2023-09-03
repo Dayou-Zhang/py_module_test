@@ -2,12 +2,9 @@
 ! Note: the context of this file is case sensitive.
 
 python module a2 ! in 
-    interface  ! in :add
-        subroutine add(a,b,c) ! in :add:add.f90
-            real intent(in) :: a
-            real intent(in) :: b
-            real intent(out) :: c
-        end subroutine add
+    interface  ! in :a2
+        subroutine blas ! in :a2:a2.f90
+        end subroutine blas
     end interface 
 end python module a2
 
